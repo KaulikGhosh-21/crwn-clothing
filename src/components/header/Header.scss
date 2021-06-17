@@ -17,6 +17,10 @@
         align-items: center;
         justify-content: flex-end;
 
+        div.option{
+            cursor: pointer;
+        }
+
         .option{
             padding: 10px 15px;
         }
