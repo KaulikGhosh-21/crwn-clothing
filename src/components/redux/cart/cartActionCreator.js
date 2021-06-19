@@ -13,4 +13,18 @@ export const addCartItem = (item) => {
     }
 }
 
+export const deleteCartFromItem = (item) => {
+    return{
+        type : CartActionTypes.DELETE_CART_ITEM,
+        payload : item
+    }
+}
+
+export const removeCartItem = (item) => {
+    return{
+        type: CartActionTypes.REMOVE_CART_ITEM,
+        payload : item
+    }
+}
+
 export default toggleCartHidden;
