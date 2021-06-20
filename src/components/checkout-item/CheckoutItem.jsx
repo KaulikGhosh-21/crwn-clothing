@@ -7,8 +7,7 @@ import "./CheckoutItem.scss";
 import {connect} from "react-redux";
 import { removeItemFromCart } from '../redux/cart/cartUtils';
 
-const CheckoutItem = ({item, deleteCartItem, addCartItem, removeCartItem}) => {
-    console.log(deleteCartItem);
+const CheckoutItem = ({item, deleteCartItem, addCartItem, removeCartItem }) => {
     return (
         <div className="checkout-item">
             <div className="image-container">
