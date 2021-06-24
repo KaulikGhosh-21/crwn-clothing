@@ -8,11 +8,12 @@ import {Route} from "react-router-dom";
 
 import {connect} from "react-redux";
 
-import { updateCollections } from "../../components/redux/shop-data/shopActionCreator";
+import { fetchCollectionsStartAsync } from "../../components/redux/shop-data/shopActionCreator";
 
-import {firestore, transformCollectionToMap} from "../../components/firebase/firebase";
+import { selectIsCollectionFetching, selectIsCollectionLoaded } from "../../components/redux/shop-data/shopDataSelectors";
 
 import WithSpinner from "../../components/spinner/Spinner";
+import { createStructuredSelector } from "reselect";
 
 const CollectionOverviewWithSpinner = WithSpinner(CollectionOverview)
 const CollectionPageWithSpinner = WithSpinner(CollectionPage)
@@ -20,29 +21,32 @@ const CollectionPageWithSpinner = WithSpinner(CollectionPage)
 
 class ShopPage extends React.Component{
 
-    constructor(props){
-        super(props);
+    // constructor(props){
+    //     super(props);
 
-        this.state={
-            isLoading : true
-        }
-    }
+    //     this.state={
+    //         isLoading : true
+    //     }
+    // }
 
-    unSubscribeFromSnapshot = null;
+    // unSubscribeFromSnapshot = null;
 
     componentDidMount(){
+        const {fetchCollectionsStartAsync} = this.props;
 
-        const { updateCollections } = this.props;
+        fetchCollectionsStartAsync();
 
-        const collectionRef = firestore.collection("collections");
+        // const { updateCollections } = this.props;
 
-        collectionRef.get().then(snapshot => {
-                 console.log(snapshot);
-                 const changedData = transformCollectionToMap(snapshot)
-                 console.log(changedData);
-                 updateCollections(changedData);
-                 this.setState({ isLoading : false });
-             })
+        // const collectionRef = firestore.collection("collections");
+
+        // collectionRef.get().then(snapshot => {
+        //          console.log(snapshot);
+        //          const changedData = transformCollectionToMap(snapshot)
+        //          console.log(changedData);
+        //          updateCollections(changedData);
+        //          this.setState({ isLoading : false });
+        //      })
 
         // this.unSubscribeFromSnapshot = collectionRef.onSnapshot(async snapshot => {
         //     console.log(snapshot);
@@ -54,25 +58,32 @@ class ShopPage extends React.Component{
     }
 
     render(){
-        const { match } = this.props;
+        const { match, isCollectionLoaded } = this.props;
         console.log(this.props);
         return(
             <div className="shop-page">
                 <Route exact path={`${match.path}`} 
-                render={(props) => <CollectionOverviewWithSpinner isLoading={this.state.isLoading} {...props}/>} 
+                render={(props) => <CollectionOverviewWithSpinner isLoading={!isCollectionLoaded} {...props}/>} 
                 />
                 <Route path={`${match.path}/:collectionId`} 
-                render={(props) => <CollectionPageWithSpinner isLoading={this.state.isLoading} {...props}/>} 
+                render={(props) => <CollectionPageWithSpinner isLoading={!isCollectionLoaded} {...props}/>} 
                 />
             </div>
         )
     }
 }
 
+const mapStateToProps = createStructuredSelector(
+    {
+        isCollectionFetching : selectIsCollectionFetching(),
+        isCollectionLoaded : selectIsCollectionLoaded()
+    }
+)
+
 const mapDispatchToProps = dispatch => {
     return{
-        updateCollections : (changedData) => dispatch(updateCollections(changedData))
+        fetchCollectionsStartAsync : () => dispatch(fetchCollectionsStartAsync())
     }
 }
 
-export default connect(null, mapDispatchToProps)(ShopPage)
+export default connect(mapStateToProps, mapDispatchToProps)(ShopPage)
