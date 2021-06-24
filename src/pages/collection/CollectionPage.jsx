@@ -21,6 +21,7 @@ const CollectionPage = ({collections}) => {
 }
 
 const mapStateToProps = (state, ownProps) => {
+    console.log(ownProps)
     return{
         collections: selectCollection(ownProps.match.params.collectionId)(state)
     }
