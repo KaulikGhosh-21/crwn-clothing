@@ -15,6 +15,7 @@ const config = {
   firebase.initializeApp(config);
 
 export const createUserProfileDocument = async (userAuth, additionalData) => {
+  console.log(additionalData)
   if(!userAuth) return;
   const userRef = firestore.doc(`users/${userAuth.uid}`);
 
@@ -22,6 +23,7 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
 
   if(!snapShot.exists){
     const { displayName, email } = userAuth;
+    console.log(displayName)
     const createdAt = new Date();
 
     try{
@@ -68,6 +70,16 @@ export const transformCollectionToMap = (collections) => {
     return accumulator
   }, {})
 
+}
+
+export const isUserAuthenticated = () => {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = auth.onAuthStateChanged(userAuth => {
+      console.log(userAuth)
+      // unsubscribe();
+      resolve(userAuth);
+    }, reject)
+  })
 }
 
 export const auth = firebase.auth();

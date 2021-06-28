@@ -27,4 +27,10 @@ export const removeCartItem = (item) => {
     }
 }
 
+export const clearCart = () => {
+    return{
+        type : CartActionTypes.CLEAR_CART
+    }
+}
+
 export default toggleCartHidden;

@@ -27,3 +27,50 @@ export const emailSignInStart = (emailAndPassword) => {
     }
 }
 
+export const checkUserSession = () => {
+    return{
+        type : UserActionTypes.GET_USER_SESSION
+    }
+}
+
+export const signOutStart = () => {
+    return{
+        type : UserActionTypes.SIGN_OUT_START
+    }
+}
+
+export const signOutSuccess = () => {
+    return{
+        type : UserActionTypes.SIGN_OUT_SUCCESS
+    }
+}
+
+export const signOutFailure = (error) => {
+    return{
+        type : UserActionTypes.SIGN_OUT_FAILURE,
+        payload : error
+    }
+}
+
+export const signUpStart = (userCredentials) => {
+    return{
+        type : UserActionTypes.SIGN_UP_START,
+        payload : userCredentials
+    }
+}
+
+export const signUpSuccess = ({user, additionalData}) => {
+    console.log(additionalData)
+    return{
+        type : UserActionTypes.SIGN_UP_SUCCESS,
+        payload : {user, additionalData}
+    }
+}
+
+export const signUpFailure = err => {
+    return{
+        type : UserActionTypes.SIGN_UP_FAILURE,
+        payload : err
+    }
+}
+

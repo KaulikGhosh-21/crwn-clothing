@@ -6,6 +6,8 @@ import "./SignUp.scss";
 
 import FormInput from "../form-input/FormInput";
 import CustomButton from "../custom-button/CustomButton";
+import { connect } from "react-redux";
+import { signUpStart } from "../redux/user/userActionCreator";
 
 class SignUp extends React.Component{
     constructor(){
@@ -20,6 +22,9 @@ class SignUp extends React.Component{
 
     handleSubmit = async (e) => {
         e.preventDefault();
+
+        const {signUpStart} = this.props;
+
         const {displayName, email, password, confirmPassword} = this.state;
 
         if(password !== confirmPassword){
@@ -27,9 +32,10 @@ class SignUp extends React.Component{
             return;
         }
 
-        try{
-            const { user } = await auth.createUserWithEmailAndPassword(email, password);
-            await createUserProfileDocument(user, {displayName});
+        // try{
+        //     const { user } = await auth.createUserWithEmailAndPassword(email, password);
+        //     console.log(user)
+        //     await createUserProfileDocument(user, {displayName});
             this.setState({
                 displayName : "",
                 email : "",
@@ -37,10 +43,11 @@ class SignUp extends React.Component{
                 confirmPassword : ""
             })
             
-        } catch(err) {
-            console.log("Error")
-        }
+        // } catch(err) {
+        //     console.log("Error")
+        // }
         
+        signUpStart({email, password, displayName})
 
     }
 
@@ -95,4 +102,10 @@ class SignUp extends React.Component{
     }
 }
 
-export default SignUp;
+const mapDispatchToProps = dispatch => {
+    return{
+        signUpStart : (userCredentials) => dispatch(signUpStart(userCredentials))
+    }
+}
+
+export default connect(null, mapDispatchToProps)(SignUp);

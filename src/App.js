@@ -9,6 +9,9 @@ import { Switch, Route, Link, Redirect } from "react-router-dom";
 import { createStructuredSelector } from "reselect";
 import { selectCurrentUser } from "./components/redux/user/userSelector";
 
+import { checkUserSession } from "./components/redux/user/userActionCreator";
+
+
 import { connect } from "react-redux";
 
 import Header from './components/header/Header';
@@ -21,6 +24,8 @@ class App extends React.Component{
   unsubscribeFromAuth = null;
 
   componentDidMount(){
+
+    const {checkUserSession} = this.props;
     const { setCurrentUser, collectionsArray } = this.props;
     // this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
       
@@ -42,11 +47,13 @@ class App extends React.Component{
 
     // collectionsArray.map to make an array of objects with just the properties we need
 
+    checkUserSession();
+
   }
 
-  componentWillUnmount(){
-    this.unsubscribeFromAuth();
-  }
+  // componentWillUnmount(){
+  //   this.unsubscribeFromAuth();
+  // }
 
   render(){
     return (
@@ -71,6 +78,12 @@ const mapStateToProps = createStructuredSelector({
   // collectionsArray : selectCollectionsForOverview
 })
 
-export default connect(mapStateToProps)(App);
+const mapDispatchToProps = dispatch => {
+  return{
+    checkUserSession : () => dispatch(checkUserSession())
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
 
 
